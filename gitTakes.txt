@@ -1,0 +1,283 @@
+Hints from the book 'Ry's Git Tutorial', by Ryan Hodson
+
+THE BASICS
+1) git log --oneline
+Nice way to get clean info about changes;
+
+2) git checkout
+Go to another phase of the project (including older version)
+
+3) git tag -a v1.0 -m "Stable version or fixed bug"
+Tags a name on the commit, making it easier to find it
+
+UNDOING THINGS
+4) git revert 'commitNumber'
+Specify to the commmit you wanto to undo, not the stable commit you
+want to return to: "undo this commit" by aplying a new commit
+
+5) git reset --hard
+Change all tracked files to match the most recent commit
+'git reset' will simply unstage files
+Either case operates only in the working directory and staging area
+so git log history remains unchanged
+
+6) git clean -f
+Removes all untracked files
+
+7) git clean and git reset 
+Operate in the working directory making permanent changes
+or permanently undo changes
+'git revert' works on staged files
+
+8) git commands operate in
+working directory - git reset undoes changes 
+staged snapshot - git reset undoes changes
+commited snapshots - git revert undoes changes
+
+9) git reset --hard/ git clean -f
+Will permanently undo uncommited changes
+
+BRANCHES I
+10) a branch is an independent line of development
+
+11) git branch <branchname> 
+Creates a branch using current directory as base
+
+12) git checkout <branchname>
+Goes into the branch
+Make the working directory and the HEAD match
+the specified branch
+
+13) git merge <selectedbranchname>
+Merges the selectedbranchname into the current branch
+
+14) git branch -d <branch-name>
+deletes the branch
+
+15) git rm <file>
+Removes it from the working directory
+and stop tracking the file
+
+16) branches are created for major additions in the project
+
+17) don't create a branch if you can't name it
+
+18) merges only affect the checked out branch
+
+BRANCHES II
+19) fast foward merges aren't reflected in the project history
+in opposition to three way merges
+
+20) sometimes a branch called develop is used to test changes
+the really stable version (public released) is the main/master
+
+21) git commit -a -m <message>
+stage all tracked files and commit the snapshot using the message
+
+22) git branch -D <branch-name> 
+Force the removal of an unmerged branch
+(erases it forever)
+
+REBASING
+23) git rebase, like in merge, requires you to be in the branch
+that you want to move 
+
+24) after rebase, it becomes a linear extesion of the master branch
+so, it's possible to do a fast-foward merge later on
+
+25) rebase also allows to integrate the most up-to-date version 
+of master without a merge
+
+26) git rebase also allows to manipulated individual commits
+not only move branches around it 
+
+27) git rebase -i master
+can be used to choose how each commit is trasferred to 
+the new base
+
+28) if you delete a line in rebasing, the commit will be lost
+
+29) git merge --no-ff <branch-name> 
+used to force a merge commit when GIT would normally 
+do a fast foward merge
+
+REWRITING history
+30) git checkout -b <branchname>
+creates and checks out to the branch at the same time
+
+31) git reset --mixed
+remove bad commit
+mixed kept the html files intact
+then regular commits separated files
+
+32) dangling commit
+cannot be reached in any branch
+
+33) git reflog
+ records every change made to the repository
+
+34) git reset --mixed HEAD~<n>
+moves the head backwards <n> commits
+but doesn't change the working directory
+
+35) git reset --hard HEAD~<n>
+moves the head backwards <n> commits
+CHANGING the working directory
+
+36) git log <since>..<until>
+display commits from <until> but no from <since>
+can be commits id's or branches names
+
+37) git log --stat
+extra information about altered files
+
+REMOTES
+38) just as branches are an abstraction to working
+directories, staged snapshot and commit history
+the repository is an abstraction for branches
+
+39) git remote -v1
+points to the original repository 
+under the assumption there is gonna be interaction
+
+40) git branch -r
+take a look at our current remote branches
+
+41) git fetch <mary/branch>
+reflects the state of the repository at the time
+of the fetch, but won't automatically update if
+the development continues
+so, they aren't direct links but read-only copies
+
+42) git push creates a new local branch
+git fetch imports commit into remote branches
+
+43) remotes are for people, branches are for topics
+do not create separated branches for each develop
+
+44) git remote add <remote-name> <remote-path>
+adds a remote repository
+
+45) git fetch <remote-name>
+downloads remote branch info, but doesn't merge anything
+"retrive the last meta data info from original" yet
+doesn't do any file transferring. just check to see if 
+there are changes available
+
+46) git pull
+does all the above (45) but also brings (copy) the changes
+from the remote repository
+
+47) git push <remote-name> <branch-name> 
+push a local branch to another repository
+
+48) git push <remote-name> <tag-name>
+Push a tag to another repository
+
+CENTRALIZED WORKFLOWS
+49) Never rebase commits that have been 
+pushed to shared repositories
+
+50) If you need to change a public commit
+use git revert
+
+51) git log master..origin/master
+mary can see what's in origin/master and 
+not in the 'local' master
+
+52) git init --bare <repository name>
+creates a git repository, but omits the working directory
+
+53) git remote rm <remote-name>
+remove the specified remote from you
+bookedmarked connections
+
+DISTRIBUTE WORKFLOWS
+54) HTTPS (or SSH) lets you fetch or push but requires password
+HTTP requeries no username or password, but pushing isn't possible
+
+55) git branch -r
+allow to see branches in remotes
+
+56) INTEGRATOR WORKFLOW
+everyone should pull from a single official repository
+while they all push to their own public repository
+
+PATCH WORKFLOWS
+57) are a solution to send only a commit to the
+project maintainer
+
+58) most likely to be used when you want
+to fix a bug in someone else's project
+
+59) git format-patch <branch-name>
+creat a patch for each commit in the current branch
+but not in <branch-hame>.
+commit-id can be used instead <branch-name>
+
+60) git am < <patch-file>
+apply a patch to the current branch
+
+TRICKS AND TIPS 
+61) git archive <branch-name> --format=zip --output=<file>
+exports a single snapshot to a zip archive <file>
+
+62) git bundle create <file> <branch-name>
+export an entire branch, with history, to the file
+
+63) git clone repo.bundle <repo-dir> -b <branch-name>
+re-create a project from a bundled repository and checkout <branch-name>
+
+64) git stash 
+temporarily stash changes to create a clean working directory
+
+65) git stash apply 
+Re-apply stashed changes to working directory
+
+66) git diff <commit-id>..<commit-id>
+view the difference - can also be done on the website
+
+67) git diff
+difference between working directory and staging area
+on the terminal
+
+68) git diff --cached
+difference between the staging area and the most recent commit
+
+69) git reset HEAD <file>
+unstage a file, but don't alter the working directory or move the 
+current branch
+
+70) git checkout <commit-id> <file>
+revert file to match <commit-id> WITHOUT SWITCHING BRANCHES
+
+71) git config --global alias.<alias-names> <git-command>
+creat shortcut and store it in global config file
+
+PLUMBING
+72) git objects: commit, tree, blob, tag
+
+73) git cat-file <type> <object-id>
+display the object where <type> is one of commit, tree, blob
+or tag
+
+74) git cat-file -t <object-id>
+Output the type of the specified object
+
+75) git ls-tree <tree-id>
+display a prettier version of the specified 
+tree object
+
+76) git gc
+performs a garbage collections on the object database
+
+77) git update-index [--add] <file>
+stage the file 
+--add flag denotes a new untracked file
+
+78) git write-tree 
+generate a stree from the index and store in object database
+
+79) git commit-tree <tree-id> -p <parent-id>
+create a new commit object from the giver tree object and parente commit
+returns the id of the new commited object
